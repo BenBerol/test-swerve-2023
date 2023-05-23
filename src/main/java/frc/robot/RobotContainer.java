@@ -4,13 +4,17 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.DriveTrainConstants;;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.WheelSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -19,12 +23,23 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+
+  private final CANSparkMax frontRightAngleMotor = new CANSparkMax(DriveTrainConstants.frontRightAngleMotorID, MotorType.kBrushless);
+  private final CANSparkMax frontRightSpeedMotor = new CANSparkMax(DriveTrainConstants.frontRightSpeedMotorID, MotorType.kBrushless);
+
+  private final CANSparkMax frontLeftAngleMotor = new CANSparkMax(DriveTrainConstants.frontLeftAngleMotorID, MotorType.kBrushless);
+  private final CANSparkMax frontLeftSpeedMotor = new CANSparkMax(DriveTrainConstants.frontLeftSpeedMotorID, MotorType.kBrushless);
+
+  private final CANSparkMax backRightAngleMotor = new CANSparkMax(DriveTrainConstants.backRightAngleMotorID, MotorType.kBrushless);
+  private final CANSparkMax backRightSpeedMotor = new CANSparkMax(DriveTrainConstants.backRightSpeedMotorID, MotorType.kBrushless);
+
+  private final CANSparkMax backLeftAngleMotor = new CANSparkMax(DriveTrainConstants.backLeftAngleMotorID, MotorType.kBrushless);
+  private final CANSparkMax backLeftSpeedMotor = new CANSparkMax(DriveTrainConstants.backLeftSpeedMotorID, MotorType.kBrushless);
+
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final WheelSubsystem m_frontRightWheelSubsystem = new WheelSubsystem(frontRightAngleMotor, frontRightSpeedMotor);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -46,9 +61,6 @@ public class RobotContainer {
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
 
   /**
